@@ -10,6 +10,13 @@ xyx如果不熟悉我的项目结构，先自行在training/下新建文件夹�
 
 （不过最近备赛有点忙，如果方便的话，尽量用lightning写下
 
+### git使用建议：
+
+https://blog.csdn.net/m0_56676311/article/details/135509261
+
+https://blog.octalzhihao.top/posts/9200.html
+
+> （仅供参考，大家可以按个人习惯和方便程度来）
 
 ## Temporary: 项目计划
 
