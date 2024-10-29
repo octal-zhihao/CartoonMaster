@@ -5,6 +5,8 @@
 
 - 必做方案GAN（生成式对抗网络）：
 
+可参考仓库：[anime_avatar_gen](https://github.com/xiaoyou-bilibili/anime_avatar_gen)
+
 最基础的DC-GAN肯定得实现
 
 加分项：GAN的各种变种/优化（可能会需要基于一些论文来做）
