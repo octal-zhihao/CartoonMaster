@@ -164,3 +164,4 @@ cython_debug/
 dataset/
 
 training/lightning_logs
+training/checker.py

@@ -20,5 +20,9 @@ class CartoonDataset(Dataset):
 
     def __getitem__(self, idx):
         img_path = self.images[idx]
-        image = Image.open(img_path).convert("RGB")
-        return self.transform(image)
+        try:
+            image = Image.open(img_path).convert("RGB")
+            return self.transform(image)
+        except Exception as e:
+            print(f"Could not load image {img_path}: {e}")
+            return self.__getitem__((idx + 1) % len(self))

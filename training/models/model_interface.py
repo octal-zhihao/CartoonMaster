@@ -2,16 +2,21 @@ import argparse
 import pytorch_lightning as pl
 import torch
 from models.DC_GAN import DC_Generator, DC_Discriminator
-from data.data_interface import DInterface
 
 class MInterface(pl.LightningModule):
-    def __init__(self, latent_dim, lr, model_name="DC_GAN"):
+    def __init__(self, **kwargs):
         super().__init__()
+        model_name = kwargs["model_name"]
+        latent_dim = kwargs["latent_dim"]
+        lr = kwargs["lr"]
+        
+        # 设置生成器和判别器
         if model_name == "DC_GAN":
             self.generator = DC_Generator(latent_dim)
             self.discriminator = DC_Discriminator()
         else:
             raise ValueError(f"Model {model_name} not supported")
+            
         self.latent_dim = latent_dim
         self.lr = lr
         self.automatic_optimization = False  # 禁用自动优化
@@ -30,7 +35,11 @@ class MInterface(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         real_images = batch
         batch_size = real_images.size(0)
+        
+        # 生成潜在向量并添加噪声
         z = torch.randn(batch_size, self.latent_dim, 1, 1).type_as(real_images)
+        noise = torch.randn_like(z) * 0.1  # 可以调整噪声的标准差
+        z += noise  # 添加噪声
 
         # 获取优化器
         opt_g, opt_d = self.optimizers()
@@ -59,26 +68,18 @@ class MInterface(pl.LightningModule):
         self.log("d_loss", d_loss, prog_bar=True)
         self.log("g_loss", g_loss, prog_bar=True)
 
+
+    def on_epoch_end(self):
+        avg_d_loss = torch.stack([x['d_loss'] for x in self.trainer.callback_metrics['train_loss']]).mean()
+        avg_g_loss = torch.stack([x['g_loss'] for x in self.trainer.callback_metrics['train_loss']]).mean()
+        self.log("avg_d_loss", avg_d_loss)
+        self.log("avg_g_loss", avg_g_loss)
+
+
     def configure_optimizers(self):
-        opt_g = torch.optim.Adam(self.generator.parameters(), lr=self.lr, betas=(0.5, 0.999))
-        opt_d = torch.optim.Adam(self.discriminator.parameters(), lr=self.lr, betas=(0.5, 0.999))
-        return [opt_g, opt_d]
+        opt_g = torch.optim.AdamW(self.generator.parameters(), lr=self.lr, betas=(0.5, 0.999))
+        opt_d = torch.optim.AdamW(self.discriminator.parameters(), lr=self.lr, betas=(0.5, 0.999))
+        scheduler_g = torch.optim.lr_scheduler.StepLR(opt_g, step_size=30, gamma=0.1)
+        scheduler_d = torch.optim.lr_scheduler.StepLR(opt_d, step_size=30, gamma=0.1)
+        return [opt_g, opt_d], [scheduler_g, scheduler_d]
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Train a GAN for cartoon image generation")
-    parser.add_argument("--data_path", type=str, default="./dataset/cartoon_color", help="Path to cartoon image dataset")
-    parser.add_argument("--latent_dim", type=int, default=100, help="Dimensionality of the latent space")
-    parser.add_argument("--batch_size", type=int, default=64, help="Training batch size")
-    parser.add_argument("--lr", type=float, default=0.0002, help="Learning rate")
-    parser.add_argument("--epochs", type=int, default=100, help="Number of training epochs")
-    args = parser.parse_args()
-
-    # 使用 DInterface 加载数据
-    data_module = DInterface(data_path=args.data_path, batch_size=args.batch_size)
-
-    # 初始化模型
-    model = GANTrainer(latent_dim=args.latent_dim, lr=args.lr)
-
-    # 训练
-    trainer = pl.Trainer(max_epochs=args.epochs)
-    trainer.fit(model, data_module)

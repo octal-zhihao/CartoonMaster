@@ -1,1 +1,1 @@
-from data_interface import DInterface
+from .data_interface import DInterface
