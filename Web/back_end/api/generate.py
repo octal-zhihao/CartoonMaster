@@ -47,6 +47,6 @@ def generate():
 
     # 返回json类型字符串
     result = {
-        "res": "/static/gan_img.png"
+        "res": "../front_end/static/gan_img.png"
     }
     return Response(json.dumps(result, ensure_ascii=False), mimetype='application/json')
