@@ -165,3 +165,6 @@ dataset/
 
 training/lightning_logs
 training/checker.py
+training/wandb/
+training/generated_images
+training/cartoon-gan
