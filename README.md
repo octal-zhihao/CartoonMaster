@@ -27,7 +27,7 @@ https://blog.octalzhihao.top/posts/9200.html
 最基础的DC-GAN肯定得实现
 
 加分项：GAN的各种变种/优化（可能会需要基于一些论文来做）
-eg. [DF-GAN](https://github.com/tobran/DF-GAN)、[CycleGAN](https://github.com/junyanz/CycleGAN)、[StackGAN](https://github.com/hanzhanggit/StackGAN/tree/master)
+eg. [DF-GAN](https://github.com/tobran/DF-GAN)、[CycleGAN](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)、[StackGAN](https://github.com/hanzhanggit/StackGAN/tree/master)
 
 [GAN（生成对抗网络）的系统全面介绍（醍醐灌顶）](https://blog.csdn.net/m0_61878383/article/details/122462196)
 
