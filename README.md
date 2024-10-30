@@ -38,5 +38,28 @@ https://blog.csdn.net/weixin_43334693/article/details/135271954
 [生成对抗网络GAN原理解析](https://www.bilibili.com/video/BV1nA4m1N74j/?vd_source=cc7c95ecf39d641dd549950fb1aa6069)
 
 
-- 可选方案：扩散模型
+深度学习部分项目结构
+
+```bash
+training/
+├── data/   # 数据集处理相关代码
+│   ├── __init__.py
+│   ├── data_interface.py # 数据接口类，用于数据的加载与预处理
+│   └── cartoon_dataset.py # 构建Dataset
+├── dataset/ # 存放数据集
+│   ├──── cartoon_color/
+│   └──── cartoon_gray/
+├── eval_script.py # 评测代码
+├── models/   # 模型相关代码
+│   ├── __init__.py
+│   ├── model_interface.py # 模型接口类
+│   └── DC_GAN.py
+├── utils/ # 工具函数和辅助脚本
+│   ├── __init__.py
+│   └── ... # 待补充
+├── main.py
+├── requirements.txt # 项目环境依赖
+└── README.md
+```
+
 
