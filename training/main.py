@@ -43,9 +43,9 @@ if __name__ == "__main__":
     parser.add_argument("--g_lr", type=float, default=0.0003, help="Generator learning rate")
     parser.add_argument("--d_lr", type=float, default=0.0001, help="Discriminator learning rate")
     parser.add_argument("--epochs", type=int, default=5000, help="Number of training epochs")
-    parser.add_argument("--model_name", type=str, default="DC_GAN", help="Name of the model to train")
+    parser.add_argument("--model_name", type=str, default="DCGAN", help="Name of the model to train")
     parser.add_argument("--mode", type=str, default="predict", help="Mode to run the script in: train or predict")
-    parser.add_argument("--checkpoint_path", type=str, default="cartoon-gan/brm7fyuc/checkpoints/epoch=199-step=6400.ckpt", help="Path to the model checkpoint for predictions")
+    parser.add_argument("--checkpoint_path", type=str, default="my_checkpoint/epoch=199-step=6400.ckpt", help="Path to the model checkpoint for predictions")
     args = parser.parse_args()
 
     

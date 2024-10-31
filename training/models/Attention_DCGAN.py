@@ -23,9 +23,9 @@ class SelfAttention(nn.Module):
         out = self.gamma * out + x  # Add residual connection
         return out
     
-class DC_Generator(nn.Module):
+class Attention_DCGenerator(nn.Module):
     def __init__(self, latent_dim, image_channels=3):
-        super(DC_Generator, self).__init__()
+        super(Attention_DCGenerator, self).__init__()
         self.fc = nn.Sequential(
             nn.ConvTranspose2d(latent_dim, 512, 4, 1, 0, bias=False),  # Output: [512, 4, 4]
             nn.BatchNorm2d(512),
@@ -58,9 +58,9 @@ class DC_Generator(nn.Module):
 
 
 
-class DC_Discriminator(nn.Module):
+class Attention_DCDiscriminator(nn.Module):
     def __init__(self, image_channels=3):
-        super(DC_Discriminator, self).__init__()
+        super(Attention_DCDiscriminator, self).__init__()
         self.fc = nn.Sequential(
             nn.Conv2d(image_channels, 64, 4, 2, 1, bias=False),       # Output: [64, 64, 64]
             nn.LeakyReLU(0.2, inplace=True),
