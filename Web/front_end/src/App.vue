@@ -63,11 +63,11 @@ const uped_img_local_path = ref('')
 // 多选框的具体实现
 const checkAll = ref(false)
 const indeterminate = ref(false)
-const value = ref("Gan")//这个value绑定了多选框的选中值
+const value = ref("Gan")//这个value绑定了选择框的选中值
 const models = ref([
   {
-    value: 'Gan',
-    label: 'Gan',
+    value: 'DC_GAN',
+    label: 'DC_GAN',
   },
   {
     value: 'DDPM',
@@ -90,17 +90,14 @@ watch(value, (val) => {
 const isInferencing = ref(false) // 控制推理按钮的状态
 
 const startInference = async () => {
-  if (!imageUrl.value || value.value.length === 0) {
-    ElMessage.error('请上传图片并选择模型')
-    return
-  }
 
   isInferencing.value = true
 
   try {
-    const response = await axios.post('/api/start', {
-      image_url: uped_img_local_path.value,
-      models: value.value,
+    const response = await axios.post('/api/generate', {
+      model: value.value,
+      gen_search_num: generateImgCount.value,
+      gen_num: finImgCount.value,
     })
     console.log(response)
 
@@ -109,9 +106,7 @@ const startInference = async () => {
       // pre_result_img_urls.value = response.data.result_images
 
       pre_result_img_urls.value = [
-        ...response.data.Unet,
-        ...response.data.deeplab,
-        ...response.data.WeClip
+        ...response.data.res,
       ]
       console.log(pre_result_img_urls.value)
       setListLength(pre_result_img_urls.value)
