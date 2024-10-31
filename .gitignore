@@ -165,5 +165,7 @@ dataset/
 
 training/lightning_logs
 training/checker.py
-
-.idea/
+training/wandb/
+training/generated_images
+training/cartoon-gan
+training/my_checkpoint

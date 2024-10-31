@@ -4,7 +4,7 @@ from torch.utils.data import Dataset
 import torchvision.transforms as transforms
 
 class CartoonDataset(Dataset):
-    def __init__(self, root_dir, image_size=96):
+    def __init__(self, root_dir, image_size=128):
         self.root_dir = root_dir
         self.image_size = image_size
         self.images = [os.path.join(root_dir, img) for img in os.listdir(root_dir) if img.endswith(".jpg")]
