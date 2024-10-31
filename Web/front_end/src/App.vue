@@ -1,44 +1,40 @@
 <script setup lang="ts">
 
 // 按钮，多选框的导入
-import {
-  Menu as IconMenu,
-  WarnTriangleFilled,
-  Avatar,
-} from '@element-plus/icons-vue'
-import { ref, watch, onMounted } from 'vue'
-import type { CheckboxValueType, UploadFile } from 'element-plus'
+import {Avatar, Menu as IconMenu, WarnTriangleFilled,} from '@element-plus/icons-vue'
+import {onMounted, ref, watch} from 'vue'
+// 展示预测结果的导入
+import {ElIcon, ElImage, ElMessage} from 'element-plus'
 
 
 // 上传图片的导入
 import axios from 'axios'
-import { ElMessage, ElUpload, ElIcon } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
-
-
-// 展示预测结果的导入
-import { ElImage } from 'element-plus';
 
 
 // 预测结果显示的具体实现
 const pre_result_img_urls = ref<string[]>([])
 
-  const img_len = ref(0)
-  const veiw_len = ref(0)
-  setListLength(pre_result_img_urls);
-  function setListLength(list: any) {
-    if (list.length <= 1){
-      img_len.value = 25
-      veiw_len.value = 26
-    }
-    else if (list.length <= 4 && list.length >= 2) {
-      img_len.value = 12.5
-      veiw_len.value = 26
-    }
-    else {
-      img_len.value = 8.33
-      veiw_len.value = 26
-    }
+const img_len = ref(0)
+const view_len = ref(0)
+const finImgCount = ref(1)
+const generateImgCount = ref(4)
+setListLength(pre_result_img_urls);
+
+function sqrtAndCeil(x: number): number {
+  // 首先计算平方根
+  const sqrtValue = Math.sqrt(x);
+  // 然后使用 Math.ceil 向上取整
+  return Math.ceil(sqrtValue);
+}
+
+function setListLength(list: any) {
+
+  let sp_number;
+  sp_number = sqrtAndCeil(list.length)
+
+  img_len.value = 25 / sp_number
+  view_len.value = 26
+
 }
 
 
@@ -67,19 +63,16 @@ const uped_img_local_path = ref('')
 // 多选框的具体实现
 const checkAll = ref(false)
 const indeterminate = ref(false)
-const value = ref<CheckboxValueType[]>([])//这个value绑定了多选框的选中值
+const value = ref("Gan")//这个value绑定了多选框的选中值
 const models = ref([
   {
-    value: 'U-net',
-    label: 'U-net',
+    value: 'Gan',
+    label: 'Gan',
   },
   {
-    value: 'DeepLab',
-    label: 'DeepLab',
-  },
-  {
-    value: 'WeClip',
-    label: 'WeClip',
+    value: 'DDPM',
+    label: 'DDPM',
+    disabled: true,
   },
 ])
 watch(value, (val) => {
@@ -146,7 +139,7 @@ onMounted(() => {
       <el-header height="55px" style="border-bottom: 1px solid var(--el-border-color)">
         <div style="width: 100%; height: 100%;display: inline-flex;align-items: center;justify-content: center;">
           <el-icon :size="25" color="#606266">
-            <Avatar />
+            <Avatar/>
           </el-icon>
           <el-text size="large" tag="b">基于gan，ddpm的卡通图象生成-demo</el-text>
         </div>
@@ -157,18 +150,20 @@ onMounted(() => {
         <el-aside width="15vw" style="border-right: 1px solid var(--el-border-color);">
           <el-menu>
             <el-menu-item index="2">
-              <el-icon><icon-menu /></el-icon>
+              <el-icon>
+                <icon-menu/>
+              </el-icon>
               <template #title>头像生成</template>
             </el-menu-item>
             <el-menu-item index="3" disabled>
               <el-icon>
-                <WarnTriangleFilled />
+                <WarnTriangleFilled/>
               </el-icon>
               <template #title>施工中</template>
             </el-menu-item>
             <el-menu-item index="4" disabled>
               <el-icon>
-                <WarnTriangleFilled />
+                <WarnTriangleFilled/>
               </el-icon>
               <template #title>施工中</template>
             </el-menu-item>
@@ -177,12 +172,31 @@ onMounted(() => {
 
         <!-- 主体部分 -->
         <el-main>
+          <div style="height: 2vw;width: 100%">
+            <!--模型选择-->
+            <el-select v-model="value" placeholder="Select" style="width: 240px">
+              <el-option
+                  v-for="item in models"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                  :disabled="item.disabled"
+              />
+            </el-select>
+            <el-text size="large"><-模型选择（默认Gan）</el-text>
+          </div>
+          <div style="height: 0.5vw;width: 100%"></div>
+          <div style="height: 0.5vw;width: 100%;border-top: 2px dashed rgb(197.7, 225.9, 255)"></div>
           <el-row>
             <el-col :span="11">
               <el-row align="top" :gutter="10">
-                <el-col :span="24" align="middle" justify="center">
-                  <!-- 选择模型部分 -->
-                  <div>
+                <el-col :span="24" justify="center">
+                  <div class="Gan-sliders">
+<!--                    <el-text size="large">最终图片数</el-text>-->
+                    <div style="color: rgb(51.2, 126.4, 204)">最终图片数</div>
+                    <el-slider class="fin-img-count" v-model="finImgCount" show-input :min="1" :max="100"/>
+                    <div style="color: rgb(51.2, 126.4, 204)">生成总数</div>
+                    <el-slider class="fin-img-count" v-model="generateImgCount" show-input :min="1" :max="100"/>
                   </div>
                 </el-col>
                 <el-col>
@@ -200,25 +214,28 @@ onMounted(() => {
             <el-col :span="11">
               <el-row align="top" :gutter="10">
                 <el-col :span="24" align="middle">
-                  <el-button 
-                  :type="isInferencing ? 'info' : 'primary'" 
-                  plain 
-                  :disabled="isInferencing"
-                  @click="startInference"
-                  style="width: 30vw;height: 4vw;">
-                  {{ isInferencing ? '推理中' : '开始推理' }}
-                </el-button>
+                  <el-button
+                      :type="isInferencing ? 'info' : 'primary'"
+                      plain
+                      :disabled="isInferencing"
+                      @click="startInference"
+                      style="width: 30vw;height: 4vw;">
+                    {{ isInferencing ? '推理中' : '开始推理' }}
+                  </el-button>
                 </el-col>
                 <el-col :span="24">
                   <div style="height: 3vw;"></div>
                 </el-col>
-                <el-col :span="24" align="middle" >
+                <el-col :span="24" align="middle">
                   <!-- 推理结果展示 -->
                   <div class="pre_result_show"
-                    :style="{ width: veiw_len+1 + 'vw', height: veiw_len + 'vw', overflowY: 'auto' }" style="border: 2px dashed rgb(159.5, 206.5, 255);border-radius: 6px;">
-                    <el-image :style="{ width: img_len + 'vw', height: img_len+0.2 + 'vw' }" v-for="(url, index) in pre_result_img_urls"
-                      :key="url" :src="url" :zoom-rate="1.2" :max-scale="7" :min-scale="0.2" :preview-src-list="pre_result_img_urls"
-                      :initial-index=index fit="cover" />
+                       :style="{ width: view_len+1 + 'vw', height: view_len + 'vw', overflowY: 'auto' }"
+                       style="border: 2px dashed rgb(159.5, 206.5, 255);border-radius: 6px;">
+                    <el-image :style="{ width: img_len + 'vw', height: img_len+0.2 + 'vw' }"
+                              v-for="(url, index) in pre_result_img_urls"
+                              :key="url" :src="url" :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
+                              :preview-src-list="pre_result_img_urls"
+                              :initial-index=index fit="cover"/>
                   </div>
                 </el-col>
               </el-row>
@@ -231,5 +248,16 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.Gan-sliders {
+  max-width: 32vw;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
 
+}
+.Gan-sliders .el-slider {
+  margin-top: 0;
+  margin-left: 12px;
+}
 </style>
