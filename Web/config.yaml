@@ -1,0 +1,11 @@
+model:
+  DCGAN:
+    latent_dim: 100
+    model_name: "DCGAN"
+    checkpoint_path: "training/my_checkpoint/epoch=359-step=11520.ckpt"
+    image_size: 128
+    batch_size: 512
+    num_workers: 8
+    g_lr: 0.0003
+    d_lr: 0.0001
+    epochs: 5000

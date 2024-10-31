@@ -1,11 +1,25 @@
 from flask import request, Response
 from Web.back_end.api import api
 import json
+from training.models import MInterface
+from training.data import DInterface
+from training.main import predict_demo
+import yaml
+
+
+def set_args(model_name, data):
+    """根据config文件和传入的data设置参数"""
+    args = {}
+    with open("Web/config.yaml", 'r') as config_file:
+        # 加载配置文件
+        config = yaml.load(config_file, Loader=yaml.FullLoader)
+        args.update(config['model'][model_name])
+    return args
 
 
 @api.route('generate', methods=['POST'])
 def generate():
-    """使用指定模型生成图像，接收表单数据，返回图片路径(json类型字符串)
+    """使用指定模型生成图像，接收表单数据，返回图片路径
 
         ### args
         |  args          | required | request type | type |  remarks                  |
@@ -30,23 +44,20 @@ def generate():
         ### return
         ```json
         {
-            "res": "/static/gan_img.png"
+            "res": ["./static/gan_img.png"]
         }
         ```
         """
     data = request.form
-    print(data)
     if 'DC_GAN' in data.get("model"):
         print('正在调用DC_GAN生成图片')
-    #     GAN_generate(
-    #         gen_search_num=int(data.get("gen_search_num")),
-    #         gen_num=int(data.get("gen_num")),
-    #         gen_mean=int(data.get("gen_mean")),
-    #         gen_std=int(data.get("gen_std")),
-    #     )
+        args = set_args(model_name="DCGAN", data=data)
+        model = MInterface.load_from_checkpoint(**args)
+        model.eval()
+        predict_demo(model, args['latent_dim'], save_dir="Web/front_end/static")
 
     # 返回json类型字符串
     result = {
-        "res": "../front_end/static/gan_img.png"
+        "res": ["./static/gan_img.png"]
     }
     return Response(json.dumps(result, ensure_ascii=False), mimetype='application/json')
