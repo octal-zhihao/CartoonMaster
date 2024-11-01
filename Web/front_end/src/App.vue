@@ -38,26 +38,26 @@ function setListLength(list: any) {
 }
 
 
-// 获取模型名称列表的请求
-const fetchModels = async () => {
-  try {
-    const response = await axios.get('/api/models')
-    if (response.status === 200) {
-      models.value = response.data.map((model: string) => ({
-        value: model,
-        label: model,
-      }))
-      ElMessage.success('模型列表已更新')
-    }
-  } catch (error) {
-    ElMessage.error('获取模型列表失败，使用默认列表')
-  }
-}
+// // 获取模型名称列表的请求
+// const fetchModels = async () => {
+//   try {
+//     const response = await axios.get('/api/models')
+//     if (response.status === 200) {
+//       models.value = response.data.map((model: string) => ({
+//         value: model,
+//         label: model,
+//       }))
+//       ElMessage.success('模型列表已更新')
+//     }
+//   } catch (error) {
+//     ElMessage.error('获取模型列表失败，使用默认列表')
+//   }
+// }
 
 
-// 上传图片到服务器的具体实现
-const imageUrl = ref('')
-const uped_img_local_path = ref('')
+// // 上传图片到服务器的具体实现
+// const imageUrl = ref('')
+// const uped_img_local_path = ref('')
 
 
 // 多选框的具体实现
@@ -91,13 +91,24 @@ const isInferencing = ref(false) // 控制推理按钮的状态
 
 const startInference = async () => {
 
+  const formData = new FormData()
+
+  if (generateImgCount.value < finImgCount.value){
+    ElMessage.warning("生成总数应大于最终图片数，已将生成总数设置为最终图片数")
+    generateImgCount.value = finImgCount.value
+  }
+
   isInferencing.value = true
 
   try {
-    const response = await axios.post('/api/generate', {
-      model: value.value,
-      gen_search_num: generateImgCount.value,
-      gen_num: finImgCount.value,
+
+    formData.append('model', value.value)
+    formData.append('gen_search_num', generateImgCount.value)
+    formData.append('gen_num', finImgCount.value)
+
+
+    const response = await axios.post('/api/generate', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
     console.log(response)
 
@@ -120,10 +131,10 @@ const startInference = async () => {
   }
 }
 
-// 初始化时获取模型名称列表
-onMounted(() => {
-  fetchModels()
-})
+// // 初始化时获取模型名称列表
+// onMounted(() => {
+//   fetchModels()
+// })
 
 
 </script>
