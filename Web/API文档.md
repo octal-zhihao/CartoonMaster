@@ -1,6 +1,6 @@
 # api
 
-## Generate(使用指定模型生成图像)
+## Generate(使用指定模型生成图像，接收表单数据，返回图片路径)
 
 ### url
 - /api/generate
@@ -31,7 +31,7 @@
 ### return
 ```json
 {
-    "res": "/static/gan_img.png"
+    "res": "[./static/gan_img.png]"
 }
 ```
 
