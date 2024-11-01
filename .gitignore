@@ -171,3 +171,5 @@ training/cartoon-gan
 training/my_checkpoint
 .idea/
 .test/
+Web/front_end/node_modules/
+
