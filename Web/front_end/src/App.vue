@@ -63,7 +63,7 @@ function setListLength(list: any) {
 // 多选框的具体实现
 const checkAll = ref(false)
 const indeterminate = ref(false)
-const value = ref("Gan")//这个value绑定了选择框的选中值
+const value = ref("DC_GAN")//这个value绑定了选择框的选中值
 const models = ref([
   {
     value: 'DC_GAN',
