@@ -2,7 +2,7 @@
 
 // 按钮，多选框的导入
 import {Avatar, Menu as IconMenu, WarnTriangleFilled,} from '@element-plus/icons-vue'
-import {onMounted, ref, watch} from 'vue'
+import {onMounted, ref, watch, computed} from 'vue'
 // 展示预测结果的导入
 import {ElIcon, ElImage, ElMessage} from 'element-plus'
 
@@ -16,8 +16,9 @@ const pre_result_img_urls = ref<string[]>([])
 
 const img_len = ref(0)
 const view_len = ref(0)
-const finImgCount = ref(1)
-const generateImgCount = ref(4)
+const ganFinImgCount = ref(1)
+const ganGenerateImgCount = ref(4)
+const ddpmGenerateImgCount = ref(1)
 setListLength(pre_result_img_urls);
 
 function sqrtAndCeil(x: number): number {
@@ -72,9 +73,11 @@ const models = ref([
   {
     value: 'DDPM',
     label: 'DDPM',
-    disabled: true,
   },
 ])
+
+const selectedModelLayout = computed(() => value.value)
+
 watch(value, (val) => {
   if (val.length === 0) {
     checkAll.value = false
@@ -93,9 +96,9 @@ const startInference = async () => {
 
   const formData = new FormData()
 
-  if (generateImgCount.value < finImgCount.value){
+  if (ganGenerateImgCount.value < ganFinImgCount.value){
     ElMessage.warning("生成总数应大于最终图片数，已将生成总数设置为最终图片数")
-    generateImgCount.value = finImgCount.value
+    ganGenerateImgCount.value = ganFinImgCount.value
   }
 
   isInferencing.value = true
@@ -103,8 +106,9 @@ const startInference = async () => {
   try {
 
     formData.append('model', value.value)
-    formData.append('gen_search_num', generateImgCount.value)
-    formData.append('gen_num', finImgCount.value)
+    formData.append('gen_search_num', ganGenerateImgCount.value)
+    formData.append('gen_num', ganFinImgCount.value)
+    formData.append('ddpm_num', ddpmGenerateImgCount.value)
 
 
     const response = await axios.post('/api/generate', formData, {
@@ -186,7 +190,6 @@ const startInference = async () => {
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                  :disabled="item.disabled"
               />
             </el-select>
             <el-text size="large"><-模型选择（默认Gan）</el-text>
@@ -197,15 +200,27 @@ const startInference = async () => {
             <el-col :span="11">
               <el-row align="top" :gutter="10">
                 <el-col :span="24" justify="center">
-                  <div class="Gan-sliders">
+                  <div  v-if="selectedModelLayout === 'DC_GAN'">
+                    <div class="Gan-sliders">
 <!--                    <el-text size="large">最终图片数</el-text>-->
                     <div style="color: rgb(51.2, 126.4, 204)">最终图片数</div>
-                    <el-slider class="fin-img-count" v-model="finImgCount" show-input :min="1" :max="100"/>
+                    <el-slider class="fin-img-count" v-model="ganFinImgCount" show-input :min="1" :max="100"/>
                     <div style="color: rgb(51.2, 126.4, 204)">生成总数</div>
-                    <el-slider class="fin-img-count" v-model="generateImgCount" show-input :min="1" :max="100"/>
+                    <el-slider class="fin-img-count" v-model="ganGenerateImgCount" show-input :min="1" :max="100"/>
                   </div>
+                  </div>
+                  <div  v-else-if="selectedModelLayout === 'DDPM'">
+                    <div class="DDPM-sliders">
+                    <div style="color: rgb(51.2, 126.4, 204)">生成图片数量</div>
+                    <el-slider class="fin-img-count" v-model="ddpmGenerateImgCount" show-input :min="1" :max="100"/>
+                    <div style="color: rgb(51.2, 126.4, 204)">施工中</div>
+                    <el-slider class="fin-img-count" v-model="ganGenerateImgCount" show-input :min="1" :max="100" :disabled="true"/>
+                  </div>
+                  </div>
+
                 </el-col>
                 <el-col>
+
                   <div style="height:5vw;"></div>
                 </el-col>
                 <el-col :span="24" align="middle">
