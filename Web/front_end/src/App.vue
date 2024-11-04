@@ -2,13 +2,40 @@
 
 // 按钮，多选框的导入
 import {Avatar, Menu as IconMenu, WarnTriangleFilled,} from '@element-plus/icons-vue'
-import {onMounted, ref, watch, computed} from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 // 展示预测结果的导入
 import {ElIcon, ElImage, ElMessage} from 'element-plus'
 
 
 // 上传图片的导入
 import axios from 'axios'
+
+// 进度条相关变量
+const progressBarStatus = ref("close")
+const loadingTime = ref(5)
+const percentage2 = ref(0)
+const progressBarColors = [
+  {color: '#f56c6c', percentage: 10},
+  {color: '#f57c6c', percentage: 15},
+  {color: '#f58c6c', percentage: 20},
+  {color: '#e6973c', percentage: 25},
+  {color: '#e6a23c', percentage: 30},
+  {color: '#e6cf3c', percentage: 35},
+  {color: '#d5e63c', percentage: 40},
+  {color: '#a2e63c', percentage: 45},
+  {color: '#53e63c', percentage: 50},
+  {color: '#5cb85e', percentage: 55},
+  {color: '#5cb87a', percentage: 60},
+  {color: '#5cb8a7', percentage: 65},
+  {color: '#5cb0b8', percentage: 70},
+  {color: '#19e0fa', percentage: 80},
+  {color: '#19befa', percentage: 85},
+  {color: '#1973fa', percentage: 90},
+  {color: '#545cff', percentage: 95},
+  {color: '#6f7ad3', percentage: 100},
+]
+const progressBarPause = ref(true)
+const isLoadProgress = computed(() => progressBarStatus.value)
 
 
 // 预测结果显示的具体实现
@@ -60,6 +87,21 @@ function setListLength(list: any) {
 // const imageUrl = ref('')
 // const uped_img_local_path = ref('')
 
+// 进度条伪加载
+onMounted(() => {
+  setInterval(() => {
+    if (percentage2.value <= 97) {
+      percentage2.value = (percentage2.value % 100) + 1
+    } else {
+      if (progressBarPause.value) {
+        percentage2.value = 98
+      } else {
+        percentage2.value = 100
+      }
+    }
+  }, loadingTime.value * 10)
+})
+
 
 // 多选框的具体实现
 const checkAll = ref(false)
@@ -96,12 +138,14 @@ const startInference = async () => {
 
   const formData = new FormData()
 
-  if (ganGenerateImgCount.value < ganFinImgCount.value){
+  if (ganGenerateImgCount.value < ganFinImgCount.value) {
     ElMessage.warning("生成总数应大于最终图片数，已将生成总数设置为最终图片数")
     ganGenerateImgCount.value = ganFinImgCount.value
   }
 
   isInferencing.value = true
+  progressBarStatus.value = "open"
+  percentage2.value = 0
 
   try {
 
@@ -112,12 +156,13 @@ const startInference = async () => {
 
 
     const response = await axios.post('/api/generate', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: {'Content-Type': 'multipart/form-data'},
     })
     console.log(response)
 
     if (response.status === 200) {
       ElMessage.success('推理完成')
+      progressBarPause.value = false
       // pre_result_img_urls.value = response.data.result_images
 
       pre_result_img_urls.value = [
@@ -132,6 +177,8 @@ const startInference = async () => {
     ElMessage.error(`推理失败: ${error}`)
   } finally {
     isInferencing.value = false
+    percentage2.value = 100
+    progressBarStatus.value = "close"
   }
 }
 
@@ -200,22 +247,23 @@ const startInference = async () => {
             <el-col :span="11">
               <el-row align="top" :gutter="10">
                 <el-col :span="24" justify="center">
-                  <div  v-if="selectedModelLayout === 'DC_GAN'">
+                  <div v-if="selectedModelLayout === 'DC_GAN'">
                     <div class="Gan-sliders">
-<!--                    <el-text size="large">最终图片数</el-text>-->
-                    <div style="color: rgb(51.2, 126.4, 204)">最终图片数</div>
-                    <el-slider class="fin-img-count" v-model="ganFinImgCount" show-input :min="1" :max="100"/>
-                    <div style="color: rgb(51.2, 126.4, 204)">生成总数</div>
-                    <el-slider class="fin-img-count" v-model="ganGenerateImgCount" show-input :min="1" :max="100"/>
+                      <!--                    <el-text size="large">最终图片数</el-text>-->
+                      <div style="color: rgb(51.2, 126.4, 204)">最终图片数</div>
+                      <el-slider class="fin-img-count" v-model="ganFinImgCount" show-input :min="1" :max="100"/>
+                      <div style="color: rgb(51.2, 126.4, 204)">生成总数</div>
+                      <el-slider class="fin-img-count" v-model="ganGenerateImgCount" show-input :min="1" :max="100"/>
+                    </div>
                   </div>
-                  </div>
-                  <div  v-else-if="selectedModelLayout === 'DDPM'">
+                  <div v-else-if="selectedModelLayout === 'DDPM'">
                     <div class="DDPM-sliders">
-                    <div style="color: rgb(51.2, 126.4, 204)">生成图片数量</div>
-                    <el-slider class="fin-img-count" v-model="ddpmGenerateImgCount" show-input :min="1" :max="100"/>
-                    <div style="color: rgb(51.2, 126.4, 204)">施工中</div>
-                    <el-slider class="fin-img-count" v-model="ganGenerateImgCount" show-input :min="1" :max="100" :disabled="true"/>
-                  </div>
+                      <div style="color: rgb(51.2, 126.4, 204)">生成图片数量</div>
+                      <el-slider class="fin-img-count" v-model="ddpmGenerateImgCount" show-input :min="1" :max="100"/>
+                      <div style="color: rgb(51.2, 126.4, 204)">施工中</div>
+                      <el-slider class="fin-img-count" v-model="ganGenerateImgCount" show-input :min="1" :max="100"
+                                 :disabled="true"/>
+                    </div>
                   </div>
 
                 </el-col>
@@ -245,7 +293,12 @@ const startInference = async () => {
                   </el-button>
                 </el-col>
                 <el-col :span="24">
-                  <div style="height: 3vw;"></div>
+                  <div style="height: 3vw;">
+                    <div class="demo-progress" style="margin-top: 1.2vw; width: 25vw;margin-left: 8vw">
+                      <el-progress :percentage="percentage2" :color="progressBarColors" striped striped-flow
+                                   v-if="isLoadProgress === 'open'" :stroke-width="15"/>
+                    </div>
+                  </div>
                 </el-col>
                 <el-col :span="24" align="middle">
                   <!-- 推理结果展示 -->
@@ -277,6 +330,7 @@ const startInference = async () => {
   flex-direction: column;
 
 }
+
 .Gan-sliders .el-slider {
   margin-top: 0;
   margin-left: 12px;
