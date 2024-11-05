@@ -179,6 +179,7 @@ const startInference = async () => {
     isInferencing.value = false
     percentage2.value = 100
     progressBarStatus.value = "close"
+    progressBarPause.value = true
   }
 }
 
