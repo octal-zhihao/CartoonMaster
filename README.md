@@ -42,21 +42,24 @@ https://blog.csdn.net/weixin_43334693/article/details/135271954
 
 ```bash
 training/
-├── data/   # 数据集处理相关代码
+├── data/                   # 数据集处理相关代码
 │   ├── __init__.py
-│   ├── data_interface.py # 数据接口类，用于数据的加载与预处理
-│   └── cartoon_dataset.py # 构建Dataset
-├── dataset/ # 存放数据集
+│   ├── data_interface.py   # 数据接口类，用于数据的加载与预处理
+│   └── cartoon_dataset.py  # 构建Dataset
+├── dataset/                # 存放数据集
 │   ├──── cartoon_color/
 │   └──── cartoon_gray/
-├── eval_script.py # 评测代码
-├── models/   # 模型相关代码
+├── models/                 # 模型相关代码
 │   ├── __init__.py
-│   ├── model_interface.py # 模型接口类
-│   └── DC_GAN.py
-├── utils/ # 工具函数和辅助脚本
+│   ├── model_interface.py  # 模型接口类
+│   ├── DCGAN.py            # DCGAN
+│   ├── Attention_DCGAN.py  # DCGAN + 自注意力机制
+│   ├── Cycle_GAN.py        # Cycle_GAN
+│   └── ...                 # 建设中
+│ 
+├── utils/                  # 工具函数和辅助脚本
 │   ├── __init__.py
-│   └── ... # 待补充
+│   └── ...                 # 待补充
 ├── main.py
 ├── requirements.txt # 项目环境依赖
 └── README.md
