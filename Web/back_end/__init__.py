@@ -3,6 +3,8 @@ from flask_cors import CORS
 from flask_docs import ApiDoc
 
 from .api import api
+
+
 # 初始化flaskAPP
 app = Flask(__name__, static_folder="Web/back_end/static")
 

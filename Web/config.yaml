@@ -9,3 +9,55 @@ model:
     g_lr: 0.0003
     d_lr: 0.0001
     epochs: 5000
+  WGAN:
+    DATALOADER:
+      BATCH_SIZE: 32
+      NUM_WORKERS: 0
+    DATASET:
+      NAME: dataset/cartoon_color
+      TRAIN_TEST_RATIO: 1.0
+    IMAGE:
+      CHANNEL: 3
+      HEIGHT: 64
+      NUMBER: 10
+      PIXEL_MEAN: (0.5, 0.5, 0.5)
+      PIXEL_STD: (0.5, 0.5, 0.5)
+      SAVE_NUMBER: 64
+      SAVE_PATH: Web/front_end/static
+      SAVE_ROW_NUMBER: 8
+      SEPARATE: False
+      WIDTH: 64
+    LOG_CONFIGURATION: config/logging.conf
+    MODEL:
+      CHECKPOINT_DIR: checkpoints
+      D:
+        DIMENSION: 256
+        PATH:
+      DEVICE: cuda
+      G:
+        DIMENSION: 1024
+        INPUT_SIZE: 100
+        PATH: training\my_checkpoint\WGAN_G_epoch_12499.pth
+      NAME: WGAN
+      WGAN:
+        CRITIC_ITERS: 5
+        GENERATOR_ITERS: 40000
+        IC: False
+        LAMBDA: 10
+        WEIGHT_CLIPING_LIMIT: 0.01
+    OUTPUT_DIR: log
+    PROJECT_NAME: WGAN
+    SOLVER:
+      BASE_LR: 0.0001
+      BETAS: 0.5, 0.999
+      CHECKPOINT_FREQ: 500
+      EPOCHS: 300
+      EVALUATE_BATCH: 128
+      EVALUATE_ITERATION: 125
+      WEIGHT_DECAY: 1e-05
+    WALKING_LATENT_SPACE:
+      IMAGE_FPS: 10
+      IMAGE_NUMBER: 16
+      IMAGE_ROW_NUMBER: 4
+      STEP: 50
+

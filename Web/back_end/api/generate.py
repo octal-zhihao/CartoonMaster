@@ -5,8 +5,9 @@ from Web.back_end.api import api
 import json
 from training.models import MInterface
 from training.data import DInterface
-from training.main import predict_demo as DCGAN_predict
-from training.DDPM.predict import predict_demo as DDPM_predict
+from training.main import predict_demo as DCGAN_generator
+from training.DDPM.predict import predict_demo as DDPM_generator
+from training.WGAN.generate import main as WGAN_generator
 
 import yaml
 
@@ -74,10 +75,14 @@ def generate():
         args = set_args(model_name="DCGAN", data=data)
         model = MInterface.load_from_checkpoint(**args)
         model.eval()
-        DCGAN_predict(model, args['latent_dim'], save_dir="Web/front_end/static")
+        DCGAN_generator(model, args['latent_dim'], save_dir="Web/front_end/static")
     if 'DDPM' in data.get("model"):
         print('正在调用DDPM生成图片')
-        DDPM_predict(save_dir="Web/front_end/static")
+        DDPM_generator(save_dir="Web/front_end/static")
+    if 'WGAN' in data.get("model"):
+        print('正在调用WGAN生成图片')
+        args = set_args(model_name="WGAN", data=data)
+        WGAN_generator(cfg=args)
     res = []
     for root, dirs, files in os.walk(save_dir):
         for file in files:
