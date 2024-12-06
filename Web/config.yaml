@@ -37,7 +37,7 @@ model:
       G:
         DIMENSION: 1024
         INPUT_SIZE: 100
-        PATH: training\my_checkpoint\WGAN_G_epoch_12499.pth
+        PATH: training\my_checkpoint\WGAN_G_epoch_23999.pth
       NAME: WGAN
       WGAN:
         CRITIC_ITERS: 5

@@ -84,6 +84,9 @@ def generate():
         args = set_args(model_name="WGAN", data=data)
         WGAN_generator(cfg=args)
     res = []
+    # 删掉多余文件夹
+    shutil.rmtree('checkpoints')
+    shutil.rmtree('log')
     for root, dirs, files in os.walk(save_dir):
         for file in files:
             # 构建相对路径
