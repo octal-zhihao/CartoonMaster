@@ -66,27 +66,6 @@ function setListLength(list: any) {
 }
 
 
-// // 获取模型名称列表的请求
-// const fetchModels = async () => {
-//   try {
-//     const response = await axios.get('/api/models')
-//     if (response.status === 200) {
-//       models.value = response.data.map((model: string) => ({
-//         value: model,
-//         label: model,
-//       }))
-//       ElMessage.success('模型列表已更新')
-//     }
-//   } catch (error) {
-//     ElMessage.error('获取模型列表失败，使用默认列表')
-//   }
-// }
-
-
-// // 上传图片到服务器的具体实现
-// const imageUrl = ref('')
-// const uped_img_local_path = ref('')
-
 // 进度条伪加载
 onMounted(() => {
   setInterval(() => {
@@ -106,7 +85,7 @@ onMounted(() => {
 // 多选框的具体实现
 const checkAll = ref(false)
 const indeterminate = ref(false)
-const value = ref("DC_GAN")//这个value绑定了选择框的选中值
+const value = ref("GAN")//这个value绑定了选择框的选中值
 const models = ref([
   {
     value: 'DC_GAN',
@@ -116,6 +95,18 @@ const models = ref([
     value: 'DDPM',
     label: 'DDPM',
   },
+  {
+    value: 'WGAN',
+    label: 'WGAN',
+  },
+  {
+    value: 'WGAN-GP',
+    label: 'WGAN-GP',
+  },
+  {
+    value: 'GAN',
+    label: 'GAN',
+  }
 ])
 
 const selectedModelLayout = computed(() => value.value)
@@ -183,12 +174,6 @@ const startInference = async () => {
   }
 }
 
-// // 初始化时获取模型名称列表
-// onMounted(() => {
-//   fetchModels()
-// })
-
-
 </script>
 
 <template>
@@ -248,7 +233,7 @@ const startInference = async () => {
             <el-col :span="11">
               <el-row align="top" :gutter="10">
                 <el-col :span="24" justify="center">
-                  <div v-if="selectedModelLayout === 'DC_GAN'">
+                  <div v-if="selectedModelLayout === 'DC_GAN' || selectedModelLayout === 'WGAN' || selectedModelLayout === 'WGAN-GP' || selectedModelLayout === 'GAN'">
                     <div class="Gan-sliders">
                       <!--                    <el-text size="large">最终图片数</el-text>-->
                       <div style="color: rgb(51.2, 126.4, 204)">最终图片数</div>
