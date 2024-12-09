@@ -6,7 +6,7 @@ import json
 from training.models import MInterface
 from training.data import DInterface
 from training.main import predict_demo as DCGAN_generator
-from training.DDPM.predict import predict_demo as DDPM_generator
+from training.DDPM.web_generate import predict_demo as DDPM_generator
 from training.WGAN.generate import main as WGAN_generator
 
 import yaml
@@ -15,7 +15,7 @@ import yaml
 def set_args(model_name, data):
     """根据config文件和传入的data设置参数"""
     args = {}
-    with open("config.yaml", 'r') as config_file:
+    with open("config.yaml", 'r', encoding='utf-8') as config_file:
         # 加载配置文件
         config = yaml.load(config_file, Loader=yaml.FullLoader)
         args.update(config['model'][model_name])
@@ -78,15 +78,18 @@ def generate():
         DCGAN_generator(model, args['latent_dim'], save_dir="Web/front_end/static")
     if 'DDPM' in data.get("model"):
         print('正在调用DDPM生成图片')
-        DDPM_generator(save_dir="Web/front_end/static")
+        args = set_args(model_name="DDPM", data=data)
+        DDPM_generator(**args)
     if 'WGAN' in data.get("model"):
         print('正在调用WGAN生成图片')
         args = set_args(model_name="WGAN", data=data)
         WGAN_generator(cfg=args)
     res = []
-    # 删掉多余文件夹
-    shutil.rmtree('checkpoints')
-    shutil.rmtree('log')
+    # 删掉多余文件夹，如果有的话
+    if os.path.exists('checkpoints'):
+        shutil.rmtree('checkpoints')
+    if os.path.exists('log'):
+        shutil.rmtree('log')
     for root, dirs, files in os.walk(save_dir):
         for file in files:
             # 构建相对路径
