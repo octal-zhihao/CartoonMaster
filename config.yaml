@@ -96,4 +96,19 @@ model:
       IMAGE_NUMBER: 16
       IMAGE_ROW_NUMBER: 4
       STEP: 50
+  WGAN-GP:
+    #-----------------------------------------------#
+    #   模型路径
+    #-----------------------------------------------#
+    generator_path: "training/my_checkpoint/WGANGP_gen.pth"
+    discriminator_path: "training/my_checkpoint/WGANGP_disc.pth"
+    channels_img: 3
+    features_gen: 64
+    features_disc: 64
+    noise_dim: 100
+    device: cuda
+    max_images: 100
+    final_images: 10
+    seed: 42
+    output_dir: "Web/front_end/static"
 
