@@ -6,6 +6,16 @@ from training.WGANGP.net import Discriminator, Generator
 
 class WGANGPInference:
     def __init__(self, generator_path="", discriminator_path="", channels_img=3, features_gen=64, features_disc=64, noise_dim=100, device=None):
+        """
+        WGANGP参数解释：
+        generator_path:推理时使用的生成器模型路径
+        discriminator_path:推理时使用的判别器模型路径
+        channels_img:图像通道数
+        features_gen:生成器的特征数
+        features_disc:判别器的特征数
+        noise_dim:生成器的输入噪声维度
+        device:推理设备
+        """
         self.device = device if device else torch.device('cpu')
         _current_file_path = os.path.abspath(__file__)
         _current_directory = os.path.dirname(_current_file_path)
