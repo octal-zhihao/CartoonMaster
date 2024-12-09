@@ -85,7 +85,7 @@ onMounted(() => {
 // 多选框的具体实现
 const checkAll = ref(false)
 const indeterminate = ref(false)
-const value = ref("GAN")//这个value绑定了选择框的选中值
+const value = ref("DC_GAN")//这个value绑定了选择框的选中值
 const models = ref([
   {
     value: 'DC_GAN',
@@ -225,7 +225,7 @@ const startInference = async () => {
                   :value="item.value"
               />
             </el-select>
-            <el-text size="large"><-模型选择（默认Gan）</el-text>
+            <el-text size="large"><-模型选择（默认DC_GAN）</el-text>
           </div>
           <div style="height: 0.5vw;width: 100%"></div>
           <div style="height: 0.5vw;width: 100%;border-top: 2px dashed rgb(197.7, 225.9, 255)"></div>
