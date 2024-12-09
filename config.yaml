@@ -1,3 +1,6 @@
+#在这里修改生成参数，例如模型路径等。
+#只有在web端生成时生效。
+#暂时没有加入DDPM的配置（在training/DDPM/ddpm.py修改）
 model:
   DCGAN:
     latent_dim: 100
@@ -37,7 +40,7 @@ model:
       G:
         DIMENSION: 1024
         INPUT_SIZE: 100
-        PATH: training\my_checkpoint\WGAN_G_epoch_23999.pth
+        PATH: training\my_checkpoint\WGAN_G_epoch_39999.pth
       NAME: WGAN
       WGAN:
         CRITIC_ITERS: 5

@@ -19,7 +19,7 @@ def main(cfg):
     
 
 if __name__ == '__main__':
-    with open('../../Web/config.yaml', 'r') as f:
+    with open('../../config.yaml', 'r') as f:
         cfg = yaml.safe_load(f)
     cfg = cfg['model']['WGAN']
     main(cfg)
