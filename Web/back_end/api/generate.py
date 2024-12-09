@@ -15,7 +15,7 @@ import yaml
 def set_args(model_name, data):
     """根据config文件和传入的data设置参数"""
     args = {}
-    with open("Web/config.yaml", 'r') as config_file:
+    with open("config.yaml", 'r') as config_file:
         # 加载配置文件
         config = yaml.load(config_file, Loader=yaml.FullLoader)
         args.update(config['model'][model_name])
