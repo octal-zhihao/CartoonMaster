@@ -111,4 +111,23 @@ model:
     final_images: 10
     seed: 42
     output_dir: "Web/front_end/static"
+  GAN:
+    #-----------------------------------------------#
+    #   模型路径
+    #-----------------------------------------------#
+    generator_path: "training/my_checkpoint/GAN_netg.pth"
+    discriminator_path: "training/my_checkpoint/GAN_netd.pth"
+    num_workers: 4
+    image_size: 96
+    batch_size: 256
+    max_epoch: 280
+    lr1: 2e-4
+    lr2: 2e-4
+    beta1: 0.5
+    gpu: True
+    d_every: 1
+    g_every: 5
+    nz: 100
+    ngf: 64
+    ndf: 64
 
