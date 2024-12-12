@@ -10,15 +10,14 @@ from torchvision.utils import save_image
 import os
 import wandb
 
-def generate(model, latent_dim, save_dir="generated_images"):
+def generate(model, latent_dim, save_dir="generated_images", generate_num=5):
     # 确保保存目录存在
     os.makedirs(save_dir, exist_ok=True)
     
     # 生成随机噪声
-    noise = torch.randn(5, latent_dim)  # 生成 5 个随机噪声，形状为 [5, latent_dim]
+    noise = torch.randn(generate_num, latent_dim)
     
-    # 将噪声张量的形状调整为 [5, latent_dim, 1, 1] 以适配生成器的输入
-    noise = noise.view(5, latent_dim, 1, 1)
+    noise = noise.view(generate_num, latent_dim, 1, 1)
     device = next(model.parameters()).device
     noise = noise.to(device)
     # 生成图像
