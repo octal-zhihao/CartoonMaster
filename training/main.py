@@ -10,7 +10,7 @@ from torchvision.utils import save_image
 import os
 import wandb
 
-def predict_demo(model, latent_dim, save_dir="generated_images"):
+def generate(model, latent_dim, save_dir="generated_images"):
     # 确保保存目录存在
     os.makedirs(save_dir, exist_ok=True)
     
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     parser.add_argument("--d_lr", type=float, default=0.0001, help="Discriminator learning rate")
     parser.add_argument("--epochs", type=int, default=5000, help="Number of training epochs")
     parser.add_argument("--model_name", type=str, default="DCGAN", help="Name of the model to train")
-    parser.add_argument("--mode", type=str, default="predict", help="Mode to run the script in: train or predict")
+    parser.add_argument("--mode", type=str, default="train", help="Mode to run the script in: train or predict")
     parser.add_argument("--checkpoint_path", type=str, default="my_checkpoint/epoch=199-step=6400.ckpt", help="Path to the model checkpoint for predictions")
     args = parser.parse_args()
 
@@ -56,7 +56,7 @@ if __name__ == "__main__":
         model = MInterface.load_from_checkpoint(**vars(args))
         model.eval()
         # 进行预测
-        predict_demo(model, args.latent_dim, save_dir="generated_images")
+        generate(model, args.latent_dim, save_dir="generated_images")
         exit()
     else:
         wandb.init(project="cartoon-gan", config=vars(args))

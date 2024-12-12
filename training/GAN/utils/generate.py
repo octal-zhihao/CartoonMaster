@@ -42,9 +42,7 @@ def generate(
     :return:
     """
     # 项目启动自动加载模型
-    device = t.device('cuda')
-    # 如果是使用CPU那么就把下面这个注释掉
-    # device = t.device('cpu')
+    device = 'cuda' if t.cuda.is_available() else 'cpu'
     # 加载我们的模型，
     netg, netd = NetG(ngf, nz).eval(), NetD(ndf).eval()
     map_location = lambda storage, loc: storage

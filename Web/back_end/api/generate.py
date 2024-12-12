@@ -5,7 +5,7 @@ from Web.back_end.api import api
 import json
 from training.models import MInterface
 from training.data import DInterface
-from training.main import predict_demo as DCGAN_generator
+from training.main import generate as DCGAN_generator
 from training.DDPM.web_generate import predict_demo as DDPM_generator
 from training.WGAN.generate import main as WGAN_generator
 from training.WGANGP.web_generate import generate as WGANGP_generator

@@ -3,6 +3,7 @@ import pytorch_lightning as pl
 import torch
 from .Attention_DCGAN import Attention_DCGenerator, Attention_DCDiscriminator
 from .DCGAN import DCGenerator, DCDiscriminator
+
 import torch.nn.functional as F
 
 class MInterface(pl.LightningModule):
@@ -13,16 +14,16 @@ class MInterface(pl.LightningModule):
         self.g_lr = kwargs["g_lr"]
         self.d_lr = kwargs["d_lr"]
 
-        
-        # 设置生成器和判别器
-        if model_name == "DCGAN":
-            self.generator = DCGenerator(self.latent_dim)
-            self.discriminator = DCDiscriminator()
-        elif model_name == "Attention_DCGAN":
-            self.generator = Attention_DCGenerator(self.latent_dim)
-            self.discriminator = Attention_DCDiscriminator()
-        else:
+        total_model = {
+            'DCGAN': [DCGenerator, DCDiscriminator],
+            'Attention_DCGAN': [Attention_DCGenerator, Attention_DCDiscriminator],
+        }
+        if model_name not in total_model:
             raise ValueError(f"Model {model_name} not supported")
+        else:
+            self.generator = total_model[model_name][0](self.latent_dim)
+            self.discriminator = total_model[model_name][1]()
+ 
         self.automatic_optimization = False  # 禁用自动优化
 
     def forward(self, z):
