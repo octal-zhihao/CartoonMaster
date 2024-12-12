@@ -58,7 +58,7 @@ model:
       SAVE_NUMBER: 64
       SAVE_PATH: Web/front_end/static
       SAVE_ROW_NUMBER: 8
-      SEPARATE: False
+      SEPARATE: True
       WIDTH: 64
     LOG_CONFIGURATION: config/logging.conf
     MODEL:
@@ -107,8 +107,8 @@ model:
     features_disc: 64
     noise_dim: 100
     device: cuda
-    max_images: 100
-    final_images: 10
+    gen_search_num: 100
+    gen_num: 10
     seed: 42
     output_dir: "Web/front_end/static"
   GAN:

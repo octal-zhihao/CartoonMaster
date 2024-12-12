@@ -18,6 +18,7 @@ def set_args(model_name, data):
         # 加载配置文件
         config = yaml.load(config_file, Loader=yaml.FullLoader)
         args.update(config['model'][model_name])
+        args.update(data)
     return args
 
 
@@ -67,14 +68,18 @@ def generate():
         ```
         """
     data = request.form
+    data = dict(data)
     save_dir = "Web/front_end/static"
+    data["gen_num"] = int(data.get("gen_num"))
+    data["gen_search_num"] = int(data.get("gen_search_num"))
+    gen_num = int(data.get("gen_num"))
     clear_dir(save_dir)
     if 'DC_GAN' == data.get("model"):
         print('正在调用DC_GAN生成图片')
         args = set_args(model_name="DCGAN", data=data)
         model = MInterface.load_from_checkpoint(**args)
         model.eval()
-        DCGAN_generator(model, args['latent_dim'], save_dir="Web/front_end/static")
+        DCGAN_generator(model, args['latent_dim'], save_dir="Web/front_end/static", generate_num=gen_num)
     if 'DDPM' == data.get("model"):
         print('正在调用DDPM生成图片')
         args = set_args(model_name="DDPM", data=data)

@@ -3,7 +3,13 @@ from yacs.config import CfgNode
 
 from training.models.WGAN.utils import *
 
+
 def main(cfg):
+    gen_num = cfg['gen_num']
+    # print(gen_num)
+    cfg["IMAGE"]["SAVE_NUMBER"] = int(gen_num)
+    # print(cfg["IMAGE"]["SAVE_ROW_NUMBER"])
+    # print(cfg)
     cfg = CfgNode(cfg)
     cfg.SOLVER.BETAS = [float(b) for b in cfg.SOLVER.BETAS.split(',')]
     # cfg = get_cfg()

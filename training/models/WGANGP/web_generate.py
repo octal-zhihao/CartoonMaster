@@ -70,7 +70,7 @@ class WGANGPInference:
 
 def generate(generator_path="", discriminator_path="", channels_img=3, features_gen=64, features_disc=64, noise_dim=100,
              device=None,
-             max_images=100, final_images=10, seed=-1, output_dir="./generated_images"):
+             gen_search_num=-1, gen_num=10, seed=-1, output_dir="./generated_images", **args):
     """
     生成并保存图像。
     :param generator_path: 推理时使用的生成器模型路径
@@ -80,11 +80,12 @@ def generate(generator_path="", discriminator_path="", channels_img=3, features_
     :param features_disc: 判别器的特征数
     :param noise_dim: 生成器的输入噪声维度
     :param device: 推理设备
-    :param max_images: 最大生成的图像数量
-    :param final_images: 最终输出的图像数量
+    :param gen_search_num: 最大生成的图像数量
+    :param gen_num: 最终输出的图像数量
     :param seed: 随机噪声种子
     :param output_dir: 保存生成图像的目录
     """
+
     # 创建输出目录
     os.makedirs(output_dir, exist_ok=True)
 
@@ -95,8 +96,8 @@ def generate(generator_path="", discriminator_path="", channels_img=3, features_
 
     # 生成图像
     final_images_tensor = inference.generate_images(
-        max_images=max_images,
-        final_images=final_images,
+        max_images=gen_search_num,
+        final_images=gen_num,
         noise_dim=noise_dim,
         seed=seed
     )
@@ -117,7 +118,7 @@ if __name__ == "__main__":
         features_disc=64,
         noise_dim=100,
         device=None,
-        max_images=100,
+        gen_search_num=100,
         final_images=10,
         seed=42,
         output_dir="./generated_images"

@@ -67,12 +67,12 @@ class Diffusion(object):
             Image.fromarray(np.uint8(test_images)).save(save_path)
 
 
-def predict_demo(**kwargs):
+def predict_demo(gen_num=1, **kwargs):
     ddpm = Diffusion(**kwargs)
     save_dir = kwargs.get("save_dir", "results/predict_out")
     os.makedirs(save_dir, exist_ok=True)
 
-    for i in range(5):
+    for i in range(gen_num):
         save_path_1x1 = os.path.join(save_dir, f"predict_1x1_result_{i}.png")
         print(f"Generate 1x1 image {i + 1}...")
         ddpm.generate_1x1_image(save_path_1x1)
