@@ -4,11 +4,10 @@ from flask import request, Response
 from Web.back_end.api import api
 import json
 from training.models import MInterface
-from training.data import DInterface
 from training.main import generate as DCGAN_generator
-from training.DDPM.web_generate import predict_demo as DDPM_generator
-from training.WGAN.generate import main as WGAN_generator
-from training.WGANGP.web_generate import generate as WGANGP_generator
+from training.models.DDPM.web_generate import predict_demo as DDPM_generator
+from training.models.WGAN.generate import main as WGAN_generator
+from training.models.WGANGP.web_generate import generate as WGANGP_generator
 import yaml
 
 
