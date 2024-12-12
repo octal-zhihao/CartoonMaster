@@ -5,7 +5,7 @@ import torch as t
 import torchvision as tv
 import yaml
 
-from training.GAN.model.BaseNet import NetG, NetD
+from training.models.GAN.model.BaseNet import NetG, NetD
 
 congig_path = os.path.abspath(__file__)
 # 获取当前文件的目录

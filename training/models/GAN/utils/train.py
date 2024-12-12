@@ -4,7 +4,7 @@ import torchvision as tv
 import tqdm
 import yaml
 
-from training.GAN.model.BaseNet import NetD, NetG
+from training.models.GAN.model.BaseNet import NetD, NetG
 from torchnet.meter import AverageValueMeter
 import visdom
 

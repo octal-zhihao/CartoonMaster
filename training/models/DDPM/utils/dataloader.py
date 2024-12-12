@@ -3,7 +3,7 @@ import torch
 from PIL import Image
 from torch.utils.data.dataset import Dataset
 
-from utils.utils import cvtColor, preprocess_input
+from training.models.DDPM.utils.utils import cvtColor, preprocess_input
 
 
 class DiffusionDataset(Dataset):

@@ -2,7 +2,7 @@ import os
 
 import torch
 import torchvision
-from training.WGANGP.net import Discriminator, Generator
+from training.models.WGANGP.net import Discriminator, Generator
 
 class WGANGPInference:
     def __init__(self, generator_path="", discriminator_path="", channels_img=3, features_gen=64, features_disc=64, noise_dim=100, device=None):

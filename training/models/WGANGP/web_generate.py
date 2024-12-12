@@ -1,7 +1,7 @@
 import os
 import torch
 import torchvision
-from training.WGANGP.net import Discriminator, Generator
+from training.models.WGANGP.net import Discriminator, Generator
 
 
 class WGANGPInference:

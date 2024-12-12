@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import imageio
 import os
-from training.WGAN.utils.logger import Logger
-from training.WGAN.utils.evaluate import get_inception_score
+from training.models.WGAN.utils.logger import Logger
+from training.models.WGAN.utils.evaluate import get_inception_score
 from torchvision import transforms,utils
 from itertools import chain
 import numpy as np

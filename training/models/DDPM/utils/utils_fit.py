@@ -4,7 +4,7 @@ import torch
 import torch.distributed as dist
 from tqdm import tqdm
 
-from utils.utils import get_lr, show_result
+from training.models.DDPM.utils.utils import get_lr, show_result
 
 
 def fit_one_epoch(diffusion_model_train, diffusion_model, loss_history, optimizer,

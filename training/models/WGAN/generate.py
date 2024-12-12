@@ -1,7 +1,7 @@
 import yaml
 from yacs.config import CfgNode
 
-from training.WGAN.utils import *
+from training.models.WGAN.utils import *
 
 def main(cfg):
     cfg = CfgNode(cfg)

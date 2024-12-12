@@ -3,9 +3,9 @@ import numpy as np
 import torch
 from PIL import Image
 from torch import nn
-from nets import (GaussianDiffusion, UNet, generate_cosine_schedule,
+from training.models.DDPM.nets import (GaussianDiffusion, UNet, generate_cosine_schedule,
                   generate_linear_schedule)
-from utils.utils import postprocess_output, show_config
+from training.models.DDPM.utils.utils import postprocess_output, show_config
 import os
 
 """
