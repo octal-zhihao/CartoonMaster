@@ -2,7 +2,7 @@ import argparse
 import pytorch_lightning as pl
 import torch
 from .Attention_DCGAN import Attention_DCGenerator, Attention_DCDiscriminator
-from .DCGAN import DCGenerator, DCDiscriminator
+from .DCGAN import Generator as DCGenerator, Discriminator as DCDiscriminator
 import torch.nn.functional as F
 import copy
 
@@ -10,14 +10,22 @@ import copy
 class UnrolledMInterface(pl.LightningModule):
     def __init__(self, **kwargs):
         super().__init__()
-        model_name = kwargs["model_name"]
+        self.model_name = kwargs["model_name"]
         self.latent_dim = kwargs["latent_dim"]
         self.g_lr = kwargs["g_lr"]
         self.d_lr = kwargs["d_lr"]
 
+        total_model = {
+            'DCGAN': [DCGenerator, DCDiscriminator],
+            'Attention_DCGAN': [Attention_DCGenerator, Attention_DCDiscriminator]
+        }
         # 设置生成器和判别器
-        self.generator = DCGenerator(self.latent_dim)
-        self.discriminator = DCDiscriminator()
+        if self.model_name not in total_model:
+            raise ValueError(f"Model {self.model_name} not supported")
+        else:
+            self.generator = total_model[self.model_name][0](**kwargs)
+            self.discriminator = total_model[self.model_name][1](**kwargs)
+        
         self.automatic_optimization = False  # 禁用自动优化
 
         self.unrolled_step = 3
