@@ -1,11 +1,13 @@
 import torch
 from torch import nn
 
-class DCGenerator(nn.Module):
-    def __init__(self, latent_dim, image_channels=3):
-        super(DCGenerator, self).__init__()
+class Generator(nn.Module):
+    def __init__(self, **kwargs):
+        super(Generator, self).__init__()
+        self.latent_dim = kwargs['latent_dim']
+        self.image_channels = kwargs['image_channels']
         self.fc = nn.Sequential(
-            nn.ConvTranspose2d(latent_dim, 512, 4, 1, 0, bias=False),  # Output: [512, 4, 4]
+            nn.ConvTranspose2d(self.latent_dim, 512, 4, 1, 0, bias=False),  # Output: [512, 4, 4]
             nn.BatchNorm2d(512),
             nn.ReLU(True),
             
@@ -25,7 +27,7 @@ class DCGenerator(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU(True),
             
-            nn.ConvTranspose2d(32, image_channels, 4, 2, 1, bias=False), # Output: [image_channels, 128, 128]
+            nn.ConvTranspose2d(32, self.image_channels, 4, 2, 1, bias=False), # Output: [image_channels, 128, 128]
             nn.Tanh()
         )
 
@@ -34,11 +36,12 @@ class DCGenerator(nn.Module):
 
 
 
-class DCDiscriminator(nn.Module):
-    def __init__(self, image_channels=3):
-        super(DCDiscriminator, self).__init__()
+class Discriminator(nn.Module):
+    def __init__(self, **kwargs):
+        super(Discriminator, self).__init__()
+        self.image_channels = kwargs['image_channels']
         self.fc = nn.Sequential(
-            nn.Conv2d(image_channels, 64, 4, 2, 1, bias=False),       # Output: [64, 64, 64]
+            nn.Conv2d(self.image_channels, 64, 4, 2, 1, bias=False),       # Output: [64, 64, 64]
             nn.LeakyReLU(0.2, inplace=True),
             
             nn.Conv2d(64, 128, 4, 2, 1, bias=False),                   # Output: [128, 32, 32]
