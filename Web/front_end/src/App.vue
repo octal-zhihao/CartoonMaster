@@ -236,19 +236,19 @@ const startInference = async () => {
                   <div v-if="selectedModelLayout === 'DC_GAN' || selectedModelLayout === 'WGAN' || selectedModelLayout === 'WGAN-GP' || selectedModelLayout === 'GAN'">
                     <div class="Gan-sliders">
                       <!--                    <el-text size="large">最终图片数</el-text>-->
-                      <div style="color: rgb(51.2, 126.4, 204)">最终图片数</div>
+                      <div style="color: rgb(51.2, 126.4, 204)">生成图片数</div>
                       <el-slider class="fin-img-count" v-model="ganFinImgCount" show-input :min="1" :max="100"/>
-                      <div style="color: rgb(51.2, 126.4, 204)">生成总数</div>
-                      <el-slider class="fin-img-count" v-model="ganGenerateImgCount" show-input :min="1" :max="100"/>
+<!--                      <div style="color: rgb(51.2, 126.4, 204)">生成总数</div>-->
+<!--                      <el-slider class="fin-img-count" v-model="ganGenerateImgCount" show-input :min="1" :max="100"/>-->
                     </div>
                   </div>
                   <div v-else-if="selectedModelLayout === 'DDPM'">
                     <div class="DDPM-sliders">
                       <div style="color: rgb(51.2, 126.4, 204)">生成图片数量</div>
                       <el-slider class="fin-img-count" v-model="ddpmGenerateImgCount" show-input :min="1" :max="100"/>
-                      <div style="color: rgb(51.2, 126.4, 204)">施工中</div>
-                      <el-slider class="fin-img-count" v-model="ganGenerateImgCount" show-input :min="1" :max="100"
-                                 :disabled="true"/>
+<!--                      <div style="color: rgb(51.2, 126.4, 204)">施工中</div>-->
+<!--                      <el-slider class="fin-img-count" v-model="ganGenerateImgCount" show-input :min="1" :max="100"-->
+<!--                                 :disabled="true"/>-->
                     </div>
                   </div>
 
