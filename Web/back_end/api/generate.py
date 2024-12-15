@@ -4,7 +4,7 @@ from flask import request, Response
 from Web.back_end.api import api
 import json
 from training.models import MInterface
-from training.main import generate as DCGAN_generator
+from training.main import DCGAN_generator as DCGAN_generator
 from training.models.DDPM.web_generate import predict_demo as DDPM_generator
 from training.models.WGAN.generate import main as WGAN_generator
 from training.models.WGANGP.web_generate import generate as WGANGP_generator
@@ -18,6 +18,7 @@ def set_args(model_name, data):
         # 加载配置文件
         config = yaml.load(config_file, Loader=yaml.FullLoader)
         args.update(config['model'][model_name])
+        # 用前端传入的参数覆盖
         args.update(data)
     return args
 

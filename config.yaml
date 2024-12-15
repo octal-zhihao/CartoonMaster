@@ -4,7 +4,7 @@
 model:
   DDPM:
     #-----------------------------------------------#
-    #   model_path指向logs文件夹下的权值文件
+    #   模型路径
     #-----------------------------------------------#
     model_path: 'training/my_checkpoint/diffusion_model_last_epoch_weights.pth'
     #-----------------------------------------------#
@@ -28,7 +28,6 @@ model:
     #-------------------------------#
     cuda: true
     save_dir: "Web/front_end/static"
-
   DCGAN:
     latent_dim: 100
     model_name: "DCGAN"
@@ -38,6 +37,7 @@ model:
     checkpoint_path: "training/my_checkpoint/epoch=359-step=11520.ckpt"
     image_size: 128
     batch_size: 512
+    image_channels: 3
     num_workers: 8
     g_lr: 0.0003
     d_lr: 0.0001
