@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.autograd import Variable
 import time
-from training.WGAN.model.BaseModule import BasicGAN
+from training.models.WGAN.model.BaseModule import BasicGAN
 
 
 class Generator(torch.nn.Module):

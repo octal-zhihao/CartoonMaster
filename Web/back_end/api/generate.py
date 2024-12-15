@@ -4,11 +4,10 @@ from flask import request, Response
 from Web.back_end.api import api
 import json
 from training.models import MInterface
-from training.data import DInterface
-from training.main import predict_demo as DCGAN_generator
-from training.DDPM.web_generate import predict_demo as DDPM_generator
-from training.WGAN.generate import main as WGAN_generator
-
+from training.main import generate as DCGAN_generator
+from training.models.DDPM.web_generate import predict_demo as DDPM_generator
+from training.models.WGAN.generate import main as WGAN_generator
+from training.models.WGANGP.web_generate import generate as WGANGP_generator
 import yaml
 
 
@@ -19,6 +18,7 @@ def set_args(model_name, data):
         # 加载配置文件
         config = yaml.load(config_file, Loader=yaml.FullLoader)
         args.update(config['model'][model_name])
+        args.update(data)
     return args
 
 
@@ -68,22 +68,30 @@ def generate():
         ```
         """
     data = request.form
+    data = dict(data)
     save_dir = "Web/front_end/static"
+    data["gen_num"] = int(data.get("gen_num"))
+    data["gen_search_num"] = int(data.get("gen_search_num"))
+    gen_num = int(data.get("gen_num"))
     clear_dir(save_dir)
-    if 'DC_GAN' in data.get("model"):
+    if 'DC_GAN' == data.get("model"):
         print('正在调用DC_GAN生成图片')
         args = set_args(model_name="DCGAN", data=data)
         model = MInterface.load_from_checkpoint(**args)
         model.eval()
-        DCGAN_generator(model, args['latent_dim'], save_dir="Web/front_end/static")
-    if 'DDPM' in data.get("model"):
+        DCGAN_generator(model, args['latent_dim'], save_dir="Web/front_end/static", generate_num=gen_num)
+    if 'DDPM' == data.get("model"):
         print('正在调用DDPM生成图片')
         args = set_args(model_name="DDPM", data=data)
         DDPM_generator(**args)
-    if 'WGAN' in data.get("model"):
+    if 'WGAN' == data.get("model"):
         print('正在调用WGAN生成图片')
         args = set_args(model_name="WGAN", data=data)
         WGAN_generator(cfg=args)
+    if 'WGAN-GP' == data.get("model"):
+        print('正在调用WGAN-GP生成图片')
+        args = set_args(model_name="WGAN-GP", data=data)
+        WGANGP_generator(**args)
     res = []
     # 删掉多余文件夹，如果有的话
     if os.path.exists('checkpoints'):

@@ -58,7 +58,7 @@ model:
       SAVE_NUMBER: 64
       SAVE_PATH: Web/front_end/static
       SAVE_ROW_NUMBER: 8
-      SEPARATE: False
+      SEPARATE: True
       WIDTH: 64
     LOG_CONFIGURATION: config/logging.conf
     MODEL:
@@ -96,4 +96,38 @@ model:
       IMAGE_NUMBER: 16
       IMAGE_ROW_NUMBER: 4
       STEP: 50
+  WGAN-GP:
+    #-----------------------------------------------#
+    #   模型路径
+    #-----------------------------------------------#
+    generator_path: "training/my_checkpoint/WGANGP_gen.pth"
+    discriminator_path: "training/my_checkpoint/WGANGP_disc.pth"
+    channels_img: 3
+    features_gen: 64
+    features_disc: 64
+    noise_dim: 100
+    device: cuda
+    gen_search_num: 100
+    gen_num: 10
+    seed: 42
+    output_dir: "Web/front_end/static"
+  GAN:
+    #-----------------------------------------------#
+    #   模型路径
+    #-----------------------------------------------#
+    generator_path: "training/my_checkpoint/GAN_netg.pth"
+    discriminator_path: "training/my_checkpoint/GAN_netd.pth"
+    num_workers: 4
+    image_size: 96
+    batch_size: 256
+    max_epoch: 280
+    lr1: 2e-4
+    lr2: 2e-4
+    beta1: 0.5
+    gpu: True
+    d_every: 1
+    g_every: 5
+    nz: 100
+    ngf: 64
+    ndf: 64
 

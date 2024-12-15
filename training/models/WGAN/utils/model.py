@@ -1,4 +1,4 @@
-from training.WGAN.model import *
+from training.models.WGAN.model import *
 
 def build_model(cfg):
 

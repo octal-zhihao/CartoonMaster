@@ -24,8 +24,10 @@ class SelfAttention(nn.Module):
         return out
     
 class Attention_DCGenerator(nn.Module):
-    def __init__(self, latent_dim, image_channels=3):
+    def __init__(self, **kwargs):
         super(Attention_DCGenerator, self).__init__()
+        image_channels = kwargs["image_channels"]
+        latent_dim = kwargs["latent_dim"]
         self.fc = nn.Sequential(
             nn.ConvTranspose2d(latent_dim, 512, 4, 1, 0, bias=False),  # Output: [512, 4, 4]
             nn.BatchNorm2d(512),
@@ -59,8 +61,9 @@ class Attention_DCGenerator(nn.Module):
 
 
 class Attention_DCDiscriminator(nn.Module):
-    def __init__(self, image_channels=3):
+    def __init__(self, **kwargs):
         super(Attention_DCDiscriminator, self).__init__()
+        image_channels = kwargs["image_channels"]
         self.fc = nn.Sequential(
             nn.Conv2d(image_channels, 64, 4, 2, 1, bias=False),       # Output: [64, 64, 64]
             nn.LeakyReLU(0.2, inplace=True),
