@@ -14,6 +14,9 @@ class UnrolledMInterface(pl.LightningModule):
         self.latent_dim = kwargs["latent_dim"]
         self.g_lr = kwargs["g_lr"]
         self.d_lr = kwargs["d_lr"]
+        self.unrolled_step = kwargs["unrolled_step"]
+        self.cnt = 0
+        self.backup = None
 
         total_model = {
             'DCGAN': [DCGenerator, DCDiscriminator],
@@ -28,9 +31,6 @@ class UnrolledMInterface(pl.LightningModule):
         
         self.automatic_optimization = False  # 禁用自动优化
 
-        self.unrolled_step = 3
-        self.cnt = 0
-        self.backup = None
 
     def forward(self, z):
         return self.generator(z)
@@ -68,26 +68,25 @@ class UnrolledMInterface(pl.LightningModule):
         self.manual_backward(d_loss)
         opt_d.step()
 
-        # ---- Generator Step ----
-        fake_images = self(z)  # 生成新的假图像用于生成器更新
-        fake_preds = self.discriminator(fake_images)  # 通过判别器评估假图像
-
-        # 计算生成器损失
-        g_loss = self.generator_loss(fake_preds)
-
-        # 更新生成器
-        opt_g.zero_grad()
-        self.manual_backward(g_loss)
-        opt_g.step()
-
-        self.log("d_loss", d_loss, prog_bar=True)
-        self.log("g_loss", g_loss, prog_bar=True)
-
-        # 判别器更新1次权重，生成器更新3次权重
         if self.cnt == 0:
             self.backup = copy.deepcopy(self.discriminator.state_dict())
-        elif self.cnt == self.unrolled_step - 1:
+        if self.cnt == self.unrolled_step-1:
+            # ---- Generator Step ----
+            fake_images = self(z)  # 生成新的假图像用于生成器更新
+            fake_preds = self.discriminator(fake_images)  # 通过判别器评估假图像
+
+            # 计算生成器损失
+            g_loss = self.generator_loss(fake_preds)
+
+            # 更新生成器
+            opt_g.zero_grad()
+            self.manual_backward(g_loss)
+            opt_g.step()
+
             self.discriminator.load_state_dict(self.backup)
+            self.log("d_loss", d_loss, prog_bar=True)
+            self.log("g_loss", g_loss, prog_bar=True)
+
         self.cnt = (self.cnt + 1) % self.unrolled_step
 
     def validation_step(self, batch, batch_idx):
