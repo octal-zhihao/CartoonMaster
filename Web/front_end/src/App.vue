@@ -106,7 +106,15 @@ const models = ref([
   {
     value: 'GAN',
     label: 'GAN',
-  }
+  },
+  {
+    value: 'UNROLLED_DCGAN',
+    label: 'UNROLLED_DCGAN',
+  },
+  {
+    value: 'EBGAN',
+    label: 'EBGAN',
+  },
 ])
 
 const selectedModelLayout = computed(() => value.value)
@@ -233,7 +241,7 @@ const startInference = async () => {
             <el-col :span="11">
               <el-row align="top" :gutter="10">
                 <el-col :span="24" justify="center">
-                  <div v-if="selectedModelLayout === 'DC_GAN' || selectedModelLayout === 'WGAN' || selectedModelLayout === 'WGAN-GP' || selectedModelLayout === 'GAN'">
+                  <div v-if="selectedModelLayout === 'DC_GAN' || selectedModelLayout === 'WGAN' || selectedModelLayout === 'WGAN-GP' || selectedModelLayout === 'GAN' || selectedModelLayout === 'UNROLLED_DCGAN' || selectedModelLayout === 'EBGAN'">
                     <div class="Gan-sliders">
                       <!--                    <el-text size="large">最终图片数</el-text>-->
                       <div style="color: rgb(51.2, 126.4, 204)">生成图片数</div>
