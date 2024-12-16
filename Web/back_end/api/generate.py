@@ -3,8 +3,8 @@ import shutil
 from flask import request, Response
 from Web.back_end.api import api
 import json
-from training.models import MInterface
-from training.main import DCGAN_generator as DCGAN_generator
+from training.models import MInterface, UnrolledMInterface
+from training.main import DCGAN_generator, EBGAN_generator
 from training.models.DDPM.web_generate import predict_demo as DDPM_generator
 from training.models.WGAN.generate import main as WGAN_generator
 from training.models.WGANGP.web_generate import generate as WGANGP_generator
@@ -81,6 +81,18 @@ def generate():
         model = MInterface.load_from_checkpoint(**args)
         model.eval()
         DCGAN_generator(model, args['latent_dim'], save_dir="Web/front_end/static", generate_num=gen_num)
+    if 'unrolled_DCGAN' == data.get("model"):
+        print('正在调用unrolled_DCGAN生成图片')
+        args = set_args(model_name="unrolled_DCGAN", data=data)
+        model = UnrolledMInterface.load_from_checkpoint(**args)
+        model.eval()
+        DCGAN_generator(model, args['latent_dim'], save_dir="Web/front_end/static", generate_num=gen_num)
+    if 'EBGAN' == data.get("model"):
+        print('正在调用EB_GAN生成图片')
+        args = set_args(model_name="EBGAN", data=data)
+        model = MInterface.load_from_checkpoint(**args)
+        model.eval()
+        EBGAN_generator(model, args['latent_dim'], save_dir="Web/front_end/static", generate_num=gen_num)
     if 'DDPM' == data.get("model"):
         print('正在调用DDPM生成图片')
         args = set_args(model_name="DDPM", data=data)
