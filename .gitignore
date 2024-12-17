@@ -172,4 +172,5 @@ training/my_checkpoint
 .idea/
 .test/
 Web/front_end/node_modules/
-
+./package-lock.json
+Web/front_end/static/
