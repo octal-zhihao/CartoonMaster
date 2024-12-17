@@ -19,8 +19,8 @@ class UnrolledMInterface(pl.LightningModule):
         self.backup = None
 
         total_model = {
-            'DCGAN': [DCGenerator, DCDiscriminator],
-            'Attention_DCGAN': [Attention_DCGenerator, Attention_DCDiscriminator]
+            'unrolled_DCGAN': [DCGenerator, DCDiscriminator],
+            'unrolled_Attention_DCGAN': [Attention_DCGenerator, Attention_DCDiscriminator]
         }
         # 设置生成器和判别器
         if self.model_name not in total_model:

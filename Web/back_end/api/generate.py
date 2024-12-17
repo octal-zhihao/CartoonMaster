@@ -81,14 +81,14 @@ def generate():
         model = MInterface.load_from_checkpoint(**args)
         model.eval()
         DCGAN_generator(model, args['latent_dim'], save_dir="Web/front_end/static", generate_num=gen_num)
-    if 'unrolled_DCGAN' == data.get("model"):
+    if 'UNROLLED_DCGAN' == data.get("model"):
         print('正在调用unrolled_DCGAN生成图片')
         args = set_args(model_name="unrolled_DCGAN", data=data)
         model = UnrolledMInterface.load_from_checkpoint(**args)
         model.eval()
         DCGAN_generator(model, args['latent_dim'], save_dir="Web/front_end/static", generate_num=gen_num)
     if 'EBGAN' == data.get("model"):
-        print('正在调用EB_GAN生成图片')
+        print('正在调用EBGAN生成图片')
         args = set_args(model_name="EBGAN", data=data)
         model = MInterface.load_from_checkpoint(**args)
         model.eval()

@@ -35,9 +35,7 @@ class Discriminator(nn.Module):
         super(Discriminator, self).__init__()
         self.img_size = cfg['image_size']
         self.channels = cfg['image_channels']
-        # Upsampling
         self.down = nn.Sequential(nn.Conv2d(self.channels, 64, 3, 2, 1), nn.ReLU())
-        # Fully-connected layers
         self.down_size = self.img_size // 2
         down_dim = 64 * (self.img_size // 2) ** 2
 
